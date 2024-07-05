@@ -61,6 +61,7 @@ The following list contains the links to the documentation of native API which i
   - [IAudioSessionEnumerator](https://docs.microsoft.com/en-us/windows/desktop/api/audiopolicy/nn-audiopolicy-iaudiosessionenumerator "IAudioSessionEnumerator")
   - [IAudioSessionControl](https://docs.microsoft.com/en-us/windows/desktop/api/audiopolicy/nn-audiopolicy-iaudiosessioncontrol "IAudioSessionControl")
   - [IAudioSessionControl2](https://docs.microsoft.com/en-us/windows/desktop/api/audiopolicy/nn-audiopolicy-iaudiosessioncontrol2 "IAudioSessionControl2")
+  - [IAudioSessionNotification](https://docs.microsoft.com/en-us/windows/win32/api/audiopolicy/nn-audiopolicy-iaudiosessionnotification "IAudioSessionNotification")
   - [ISimpleAudioVolume](https://docs.microsoft.com/en-us/windows/desktop/api/audioclient/nn-audioclient-isimpleaudiovolume "ISimpleAudioVolume")
   - [IAudioMeterInformation](https://docs.microsoft.com/en-us/windows/win32/api/endpointvolume/nn-endpointvolume-iaudiometerinformation "IAudioMeterInformation")
 
