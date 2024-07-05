@@ -8,9 +8,9 @@ export GOARCH := amd64
 examples := $(wildcard example/*)
 bins     := $(patsubst example/%,$(RELEASE_DIR)/%.exe,$(examples))
 
-all: $(bins)
+all: $(RELEASE_DIR) $(bins)
 
-$(RELEASE_DIR)/%.exe: bin $(wildcard example/$*)
+$(RELEASE_DIR)/%.exe: $(wildcard example/$*)
 	go build -o "$@" -ldflags "-X main.revision=$(REVISION) -X main.version=$(VERSION)" github.com/moutend/go-wca/example/$*
 
 $(RELEASE_DIR):
