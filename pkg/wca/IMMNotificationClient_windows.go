@@ -134,26 +134,6 @@ func mmncOnPropertyValueChanged(this uintptr, pwstrDeviceId uintptr, key uintptr
 	return ole.S_OK
 }
 
-func LPCWSTRToString(lpcwstr uintptr, maxChars int) string {
-	if lpcwstr == 0 || maxChars == 0 {
-		return ""
-	}
-
-	us := []uint16{}
-
-	for i := 0; i < maxChars; i += 2 {
-		u := *(*uint16)(unsafe.Pointer(lpcwstr + uintptr(i)))
-
-		if u == 0 {
-			break
-		}
-
-		us = append(us, u)
-	}
-
-	return syscall.UTF16ToString(us)
-}
-
 func NewIMMNotificationClient(callback IMMNotificationClientCallback) *IMMNotificationClient {
 	vTable := &IMMNotificationClientVtbl{}
 
