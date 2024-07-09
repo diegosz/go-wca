@@ -31,7 +31,7 @@ func mmncOnDeviceRemoved(this uintptr, pwstrDeviceId uintptr) int64 {
 	return ole.E_NOTIMPL
 }
 
-func mmncOnDeviceStateChanged(this uintptr, pwstrDeviceId uintptr, dwNewState uintptr) int64 {
+func mmncOnDeviceStateChanged(this uintptr, pwstrDeviceId uintptr, dwNewState uint32) int64 {
 	return ole.E_NOTIMPL
 }
 
