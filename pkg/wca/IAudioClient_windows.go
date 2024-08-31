@@ -12,7 +12,26 @@ import (
 )
 
 func acInitialize(ac *IAudioClient, shareMode, streamFlags uint32, nsBufferDuration, nsPeriodicity REFERENCE_TIME, format *WAVEFORMATEX, audioSessionGUID *ole.GUID) (err error) {
-	hr, _, _ := syscall.Syscall9(
+	hr, _, _ := syscall.SyscallN(
+		ac.VTable().Initialize,
+		7,
+		uintptr(unsafe.Pointer(ac)),
+		uintptr(shareMode),
+		uintptr(streamFlags),
+		uintptr(nsBufferDuration),
+		uintptr(nsPeriodicity),
+		uintptr(unsafe.Pointer(format)),
+		uintptr(unsafe.Pointer(audioSessionGUID)),
+		0,
+		0)
+	if hr != 0 {
+		err = ole.NewError(hr)
+	}
+	return
+}
+
+func acInitializeEx(ac *IAudioClient, shareMode, streamFlags uint32, nsBufferDuration, nsPeriodicity REFERENCE_TIME, format *WAVEFORMATEXTENSIBLE, audioSessionGUID *ole.GUID) (err error) {
+	hr, _, _ := syscall.SyscallN(
 		ac.VTable().Initialize,
 		7,
 		uintptr(unsafe.Pointer(ac)),
@@ -86,11 +105,24 @@ func acIsFormatSupported(ac *IAudioClient, shareMode uint32, wfx *WAVEFORMATEX, 
 }
 
 func acGetMixFormat(ac *IAudioClient, wfx **WAVEFORMATEX) (err error) {
-	hr, _, _ := syscall.Syscall(
+	hr, _, _ := syscall.SyscallN(
 		ac.VTable().GetMixFormat,
 		2,
 		uintptr(unsafe.Pointer(ac)),
 		uintptr(unsafe.Pointer(wfx)),
+		0)
+	if hr != 0 {
+		err = ole.NewError(hr)
+	}
+	return
+}
+
+func acGetMixFormatEx(ac *IAudioClient, wfe **WAVEFORMATEXTENSIBLE) (err error) {
+	hr, _, _ := syscall.SyscallN(
+		ac.VTable().GetMixFormat,
+		2,
+		uintptr(unsafe.Pointer(ac)),
+		uintptr(unsafe.Pointer(wfe)),
 		0)
 	if hr != 0 {
 		err = ole.NewError(hr)
