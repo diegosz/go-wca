@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -78,7 +77,9 @@ func run(args []string) (err error) {
 	f.Var(&filenameFlag, "output", "file name")
 	f.Var(&filenameFlag, "o", "Alias of --output")
 	f.BoolVar(&versionFlag, "version", false, "Show version")
-	f.Parse(args[1:])
+	if err = f.Parse(args[1:]); err != nil {
+		return
+	}
 
 	if versionFlag {
 		fmt.Printf("%s-%s\n", version, revision)
@@ -93,12 +94,9 @@ func run(args []string) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {
-		select {
-		case <-signalChan:
-			fmt.Println("Interrupted by SIGINT")
-			cancel()
-		}
-		return
+		<-signalChan
+		fmt.Println("Interrupted by SIGINT")
+		cancel()
 	}()
 
 	if audio, err = loopbackCaptureSharedEventDriven(ctx, durationFlag.Value); err != nil {
@@ -107,7 +105,7 @@ func run(args []string) (err error) {
 	if file, err = wav.Marshal(audio); err != nil {
 		return
 	}
-	if err = ioutil.WriteFile(filenameFlag.Value, file, 0644); err != nil {
+	if err = os.WriteFile(filenameFlag.Value, file, 0644); err != nil {
 		return
 	}
 	fmt.Println("Successfully done")
@@ -203,14 +201,18 @@ func loopbackCaptureSharedEventDriven(ctx context.Context, duration time.Duratio
 	}
 
 	fakeAudioReadyEvent := wca.CreateEventExA(0, 0, 0, wca.EVENT_MODIFY_STATE|wca.SYNCHRONIZE)
-	defer wca.CloseHandle(fakeAudioReadyEvent)
+	defer func() {
+		_ = wca.CloseHandle(fakeAudioReadyEvent)
+	}()
 
 	if err = cac.SetEventHandle(fakeAudioReadyEvent); err != nil {
 		return
 	}
 
 	audioReadyEvent := wca.CreateEventExA(0, 0, 0, wca.EVENT_MODIFY_STATE|wca.SYNCHRONIZE)
-	defer wca.CloseHandle(audioReadyEvent)
+	defer func() {
+		_ = wca.CloseHandle(audioReadyEvent)
+	}()
 
 	if err = rac.SetEventHandle(audioReadyEvent); err != nil {
 		return
@@ -319,7 +321,9 @@ func loopbackCaptureSharedEventDriven(ctx context.Context, duration time.Duratio
 		}
 	}
 
-	io.Copy(audio, bytes.NewBuffer(output))
+	if _, err = io.Copy(audio, bytes.NewBuffer(output)); err != nil {
+		return
+	}
 
 	fmt.Println("Stop capturing")
 	if err = cac.Stop(); err != nil {
@@ -345,7 +349,6 @@ func watchEvent(ctx context.Context, event uintptr) (err error) {
 		err = ctx.Err()
 		return
 	}
-	return
 }
 
 func eventEmitter(event uintptr) (err error) {

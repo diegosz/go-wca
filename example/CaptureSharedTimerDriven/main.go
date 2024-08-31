@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -78,7 +77,9 @@ func run(args []string) (err error) {
 	f.Var(&filenameFlag, "output", "file name")
 	f.Var(&filenameFlag, "o", "Alias of --output")
 	f.BoolVar(&versionFlag, "version", false, "Show version")
-	f.Parse(args[1:])
+	if err = f.Parse(args[1:]); err != nil {
+		return
+	}
 
 	if versionFlag {
 		fmt.Printf("%s-%s\n", version, revision)
@@ -93,12 +94,9 @@ func run(args []string) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {
-		select {
-		case <-signalChan:
-			fmt.Println("Interrupted by SIGINT")
-			cancel()
-		}
-		return
+		<-signalChan
+		fmt.Println("Interrupted by SIGINT")
+		cancel()
 	}()
 
 	if audio, err = captureSharedTimerDriven(ctx, durationFlag.Value); err != nil {
@@ -107,7 +105,7 @@ func run(args []string) (err error) {
 	if file, err = wav.Marshal(audio); err != nil {
 		return
 	}
-	if err = ioutil.WriteFile(filenameFlag.Value, file, 0644); err != nil {
+	if err = os.WriteFile(filenameFlag.Value, file, 0644); err != nil {
 		return
 	}
 	fmt.Println("Successfully done")
@@ -261,7 +259,9 @@ func captureSharedTimerDriven(ctx context.Context, duration time.Duration) (audi
 		}
 	}
 
-	io.Copy(audio, bytes.NewBuffer(output))
+	if _, err = io.Copy(audio, bytes.NewBuffer(output)); err != nil {
+		return
+	}
 
 	fmt.Println("Stop capturing")
 	if err = ac.Stop(); err != nil {

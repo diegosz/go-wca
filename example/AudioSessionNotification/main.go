@@ -71,7 +71,7 @@ func run(args []string) error {
 
 	go func() {
 		for session := range watch {
-			setupSessionCallback(deviceName, release, session)
+			_ = setupSessionCallback(deviceName, release, session)
 		}
 	}()
 
@@ -197,12 +197,14 @@ func onIconPathChanged(deviceName, newIconPath string, eventContext *ole.GUID) e
 	return nil
 }
 
+//nolint:unused
 func onSimpleVolumeChanged(deviceName string, newVolume float32, mute bool, eventContext *ole.GUID) error {
 	fmt.Printf("%s: called OnSimpleVolumeChanged\t%f %v\n", deviceName, newVolume, mute)
 
 	return nil
 }
 
+//nolint:unused
 func onChannelVolumeChanged(deviceName string, channelCount int, newChannelVolumeArray []float32, changedChannel int, eventContext *ole.GUID) error {
 	fmt.Printf("%s: called onChannelVolumeChanged\t%d %v %d\n", deviceName, channelCount, newChannelVolumeArray, changedChannel)
 

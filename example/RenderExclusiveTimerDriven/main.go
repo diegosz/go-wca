@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -54,7 +53,9 @@ func run(args []string) (err error) {
 	f.Var(&filenameFlag, "input", "Specify WAVE format audio (e.g. music.wav)")
 	f.Var(&filenameFlag, "i", "Alias of --input")
 	f.BoolVar(&versionFlag, "version", false, "Show version")
-	f.Parse(args[1:])
+	if err = f.Parse(args[1:]); err != nil {
+		return
+	}
 
 	if versionFlag {
 		fmt.Printf("%s-%s\n", version, revision)
@@ -63,7 +64,7 @@ func run(args []string) (err error) {
 	if filenameFlag.Value == "" {
 		return
 	}
-	if file, err = ioutil.ReadFile(filenameFlag.Value); err != nil {
+	if file, err = os.ReadFile(filenameFlag.Value); err != nil {
 		return
 	}
 	if err = wav.Unmarshal(file, audio); err != nil {
@@ -75,12 +76,9 @@ func run(args []string) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {
-		select {
-		case <-signalChan:
-			fmt.Println("Interrupted by SIGINT")
-			cancel()
-		}
-		return
+		<-signalChan
+		fmt.Println("Interrupted by SIGINT")
+		cancel()
 	}()
 
 	if err = renderExclusiveTimerDriven(ctx, audio); err != nil {

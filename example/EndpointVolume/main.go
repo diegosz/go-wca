@@ -84,7 +84,6 @@ func main() {
 	if err = run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-	return
 }
 
 func run(args []string) (err error) {
@@ -101,7 +100,9 @@ func run(args []string) (err error) {
 	f.Var(&muteFlag, "mute", "Specify mute state (default is false)")
 	f.Var(&muteFlag, "m", "Alias of --mute")
 	f.BoolVar(&versionFlag, "version", false, "Show version")
-	f.Parse(args[1:])
+	if err = f.Parse(args[1:]); err != nil {
+		return
+	}
 
 	if versionFlag {
 		fmt.Printf("%s-%s\n", version, revision)

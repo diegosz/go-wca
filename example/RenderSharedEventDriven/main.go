@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -54,7 +53,9 @@ func run(args []string) (err error) {
 	f.Var(&filenameFlag, "input", "Specify WAVE format audio (e.g. music.wav)")
 	f.Var(&filenameFlag, "i", "Alias of --input")
 	f.BoolVar(&versionFlag, "version", false, "Show version")
-	f.Parse(args[1:])
+	if err = f.Parse(args[1:]); err != nil {
+		return
+	}
 
 	if versionFlag {
 		fmt.Printf("%s-%s\n", version, revision)
@@ -63,7 +64,7 @@ func run(args []string) (err error) {
 	if filenameFlag.Value == "" {
 		return
 	}
-	if file, err = ioutil.ReadFile(filenameFlag.Value); err != nil {
+	if file, err = os.ReadFile(filenameFlag.Value); err != nil {
 		return
 	}
 	if err = wav.Unmarshal(file, audio); err != nil {
@@ -75,11 +76,9 @@ func run(args []string) (err error) {
 	ctx, cancel := context.WithCancel(context.Background())
 
 	go func() {
-		select {
-		case <-signalChan:
-			fmt.Println("Interrupted by SIGINT")
-			cancel()
-		}
+		<-signalChan
+		fmt.Println("Interrupted by SIGINT")
+		cancel()
 	}()
 
 	if err = renderSharedEventDriven(ctx, audio); err != nil {
@@ -162,7 +161,9 @@ func renderSharedEventDriven(ctx context.Context, audio *wav.File) (err error) {
 	}
 
 	audioReadyEvent := wca.CreateEventExA(0, 0, 0, wca.EVENT_MODIFY_STATE|wca.SYNCHRONIZE)
-	defer wca.CloseHandle(audioReadyEvent)
+	defer func() {
+		_ = wca.CloseHandle(audioReadyEvent)
+	}()
 
 	if err = ac.SetEventHandle(audioReadyEvent); err != nil {
 		return
@@ -270,7 +271,6 @@ func watchEvent(ctx context.Context, event uintptr) (err error) {
 		err = ctx.Err()
 		return
 	}
-	return
 }
 
 func eventEmitter(event uintptr) (err error) {

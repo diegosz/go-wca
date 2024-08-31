@@ -78,6 +78,7 @@ func aseOnIconPathChanged(this, lpcwstrNewIconPath, lpcguidEventContext uintptr)
 	return ole.S_OK
 }
 
+//nolint:unused
 func aseOnSimpleVolumeChanged(this uintptr, newVolume float32, muteValue uint32, lpcguidEventContext uintptr) int64 {
 	ase := (*IAudioSessionEvents)(unsafe.Pointer(this))
 
@@ -100,6 +101,7 @@ func aseOnSimpleVolumeChanged(this uintptr, newVolume float32, muteValue uint32,
 	return ole.S_OK
 }
 
+//nolint:unused
 func aseOnChannelVolumeChanged(this uintptr, channelCount uint32, newChannelVolumeArray []float32, changedChannel uint32, lpcguidEventContext uintptr) int64 {
 	ase := (*IAudioSessionEvents)(unsafe.Pointer(this))
 

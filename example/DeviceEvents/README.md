@@ -5,7 +5,7 @@ This example shows how to hook audio device events.
 ## Prerequisites
 
 - Go 1.23 or later
-- `go-ole` (https://github.com/go-ole/go-ole)
+- `go-ole` (<https://github.com/go-ole/go-ole>)
 
 ## Build
 
