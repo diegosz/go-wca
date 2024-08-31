@@ -13,7 +13,7 @@ bins     := $(patsubst example/%,$(RELEASE_DIR)/%.exe,$(examples))
 all: $(RELEASE_DIR) $(bins)
 
 $(RELEASE_DIR)/%.exe: $(wildcard example/$*/*)
-	go build -o "$@" -ldflags "-X main.revision=$(REVISION) -X main.version=$(VERSION)" github.com/moutend/go-wca/example/$*
+	go build -o "$@" -ldflags "-X main.revision=$(REVISION) -X main.version=$(VERSION)" github.com/diegosz/go-wca/example/$*
 
 $(RELEASE_DIR):
 	mkdir -p $(RELEASE_DIR)

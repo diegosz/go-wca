@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-ole/go-ole"
 
-	"github.com/moutend/go-wca/pkg/wca"
+	"github.com/diegosz/go-wca/pkg/wca"
 )
 
 func main() {

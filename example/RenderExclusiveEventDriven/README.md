@@ -34,13 +34,4 @@ Some audio interfaces fails playback in exclusive event driven mode. I use Stein
 
 I don't know why but if you want to use exclusive audio rendering, you should use timer driven mode for now.
 
-## Contributing
-
-1. Fork ([https://github.com/moutend/go-wca/fork](https://github.com/moutend/go-wca/fork))
-1. Create a feature branch
-1. Add changes
-1. Run `go fmt`
-1. Commit your changes
-1. Open a new Pull Request
-
 The Windows Core Audio API was introduced Windows vista, so that the later than that version of Windows could run this example. However, I'm not sure because I've just tested this example on Windows 10 version 1607 at the moment. Operation verification including bug report are welcome.

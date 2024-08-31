@@ -23,7 +23,7 @@ That's it. Then you'll get `AudioSessionNotification.exe`. Note that your platfo
 
 ## Contributing
 
-Bug reports and improving the documentation are welcome. (https://github.com/moutend/go-wca/issues)
+Bug reports and improving the documentation are welcome. (https://github.com/diegosz/go-wca/issues)
 
 The Windows Core Audio API IAudioSessionNotification was introduced in Windows 7, so that the later than that version of Windows should run this example.
 Tested on Windows 10 however.

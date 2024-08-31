@@ -61,15 +61,6 @@ The following list contains the links to the documentation of native API which i
   - [ISimpleAudioVolume](https://docs.microsoft.com/en-us/windows/desktop/api/audioclient/nn-audioclient-isimpleaudiovolume "ISimpleAudioVolume")
   - [IAudioMeterInformation](https://docs.microsoft.com/en-us/windows/win32/api/endpointvolume/nn-endpointvolume-iaudiometerinformation "IAudioMeterInformation")
 
-## Contributing
-
-1. Fork ([https://github.com/moutend/go-wca/fork](https://github.com/moutend/go-wca/fork))
-2. Create a feature branch
-3. Add changes
-4. Run `go fmt`
-5. Commit your changes
-6. Open a new Pull Request
-
 ## Author
 
 [Yoshiyuki Koyanagi <moutend@gmail.com>](https://github.com/moutend)
