@@ -17,7 +17,7 @@ That's it. Then you'll get `ToggleMicrophone.exe`. Note that your platform is no
 ## Usage
 
 ```console
-./ToggleMicrophone --mute true
+./ToggleMicrophone --device "Microphone (Realtek(R) Audio)"
 ```
 
 Available flags are:
