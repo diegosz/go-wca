@@ -1,9 +1,5 @@
 # go-wca
 
-[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)][license]
-
-[license]: https://github.com/moutend/go-wca/blob/develop/LICENSE
-
 Pure golang bindings for Windows Core Audio API. The `cgo` is not required.
 
 ## Features
@@ -24,7 +20,7 @@ If you're not familiar with Windows Core Audio API, visit the MSDN.
 
 ## Prerequisites
 
-- Go 1.13 or later
+- Go 1.23 or later
 
 ## Usage
 
