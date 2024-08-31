@@ -72,4 +72,8 @@ var (
 	IID_IAudioEndpointVolume         = ole.NewGUID("{5CDF2C82-841E-4546-9722-0CF74078229A}")
 	IID_IAudioEndpointVolumeEx       = ole.NewGUID("{66E11784-F695-4F28-A505-A7080081A78F}")
 	IID_IAudioMeterInformation       = ole.NewGUID("{C02216F6-8C67-4B5B-9D00-D008E73E0064}")
+
+	// From https://github.com/DanStevens/AudioEndPointController/blob/master/EndPointController/PolicyConfig.h
+	GUID_IPolicyConfigVista       = ole.NewGUID("{568b9108-44bf-40b4-9006-86afe5b5a620}")
+	GUID_CPolicyConfigVistaClient = ole.NewGUID("{294935CE-F637-4E7C-A41B-AB255460B862}")
 )

@@ -24,4 +24,4 @@ Available flags are:
 
 - `-d, --device` define device ID
 
-The Windows Core Audio API was introduced Windows vista, so that the later than that version of Windows could run this example. However, I'm not sure because I've just tested this example on Windows 10 version 1607 at the moment. Operation verification including bug report are welcome.
+There is an undocumented COM API called IPolicyConfig which allows to do nice things like changing the default audio device used by Windows.

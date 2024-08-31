@@ -73,16 +73,13 @@ func run(args []string) (err error) {
 }
 
 func setAudioDeviceByID(deviceID string) (err error) {
-	GUID_IPolicyConfigVista := ole.NewGUID("{568b9108-44bf-40b4-9006-86afe5b5a620}")
-	GUID_CPolicyConfigVistaClient := ole.NewGUID("{294935CE-F637-4E7C-A41B-AB255460B862}")
-
 	if err = ole.CoInitializeEx(0, ole.COINIT_APARTMENTTHREADED); err != nil {
 		return
 	}
 	defer ole.CoUninitialize()
 
 	var pc *wca.IPolicyConfigVista
-	if err = wca.CoCreateInstance(GUID_CPolicyConfigVistaClient, 0, wca.CLSCTX_ALL, GUID_IPolicyConfigVista, &pc); err != nil {
+	if err = wca.CoCreateInstance(wca.GUID_CPolicyConfigVistaClient, 0, wca.CLSCTX_ALL, wca.GUID_IPolicyConfigVista, &pc); err != nil {
 		return
 	}
 	defer pc.Release()
