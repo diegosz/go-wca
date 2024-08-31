@@ -4,7 +4,7 @@ An example to capture WASAPI audio session events.
 
 ## Prerequisites
 
-- Go 1.13 or later
+- Go 1.23 or later
 - `go-ole` (https://github.com/go-ole/go-ole)
 
 ## Build
