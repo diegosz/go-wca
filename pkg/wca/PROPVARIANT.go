@@ -37,3 +37,12 @@ func NewBoolPropVariant(b bool) PROPVARIANT {
 	}
 	return PROPVARIANT{v}
 }
+
+// NewEmptyPropVariant creates a new empty PROPVARIANT. If we want to remove a
+// property from a property store, we do it by setting the property to an empty
+// PROPVARIANT.
+func NewEmptyPropVariant() PROPVARIANT {
+	v := ole.VARIANT{}
+	v.VT = ole.VT_EMPTY
+	return PROPVARIANT{v}
+}
