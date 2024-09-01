@@ -227,11 +227,8 @@ func disableListening(ps *wca.IPropertyStore) (err error) {
 		return fmt.Errorf("failed to disable listen save power: %v", err)
 	}
 	// Set the listen device to default.
-	var npv wca.PROPVARIANT
-	if npv, err = wca.NewStringPropVariant(""); err != nil {
-		return fmt.Errorf("failed to create default listen device setting: %v", err)
-	}
-	if err = ps.SetValue(&wca.PKEY_Listen_Setting_Device, &npv); err != nil {
+	empty := wca.NewEmptyPropVariant()
+	if err = ps.SetValue(&wca.PKEY_Listen_Setting_Device, &empty); err != nil {
 		return fmt.Errorf("failed to set listen device: %v", err)
 	}
 	return nil
