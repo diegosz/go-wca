@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	wcaRetryInterval = 100 * time.Millisecond
-	wcaRetryCount    = 5
+	wcaRetryInterval  = 100 * time.Millisecond
+	wcaRetryCount     = 5
+	defaultDeviceName = "Default"
 )
 
 var version = "latest"
@@ -87,7 +88,7 @@ func run(args []string) (err error) {
 	f := flag.NewFlagSet(args[0], flag.ExitOnError)
 	f.Var(&listenFlag, "listen", "Enable or Disable listening (default: true)")
 	f.Var(&inFlag, "in", "Specify the input device display name (required)")
-	f.Var(&outFlag, "out", "Specify the output device display name (required)")
+	f.Var(&outFlag, "out", "Specify the output device display name")
 	f.BoolVar(&versionFlag, "version", false, "Show version")
 	if err = f.Parse(args[1:]); err != nil {
 		return
@@ -104,8 +105,7 @@ func run(args []string) (err error) {
 		return
 	}
 	if listenFlag.Value == "true" && outFlag.Value == "" {
-		err = fmt.Errorf("an output device name is required")
-		return
+		_ = outFlag.Set(defaultDeviceName)
 	}
 	return listenMicrophone(listenFlag.Bool(), inFlag.Value, outFlag.Value)
 }
@@ -159,21 +159,29 @@ func listenMicrophone(enable bool, in, out string) error {
 
 	switch enable {
 	case true:
-		outDevice, outInfo, err := findDevice(rdc, DeviceMatcherByName(out))
-		if err != nil {
-			return fmt.Errorf("failed to find output device: %v", err)
-		}
-		defer func() {
-			if outDevice != nil {
-				_ = outDevice.Release()
+		var outID, outLog string
+		if out != defaultDeviceName {
+			outDevice, outInfo, err := findDevice(rdc, DeviceMatcherByName(out))
+			if err != nil {
+				return fmt.Errorf("failed to find output device: %v", err)
 			}
-		}()
-		if err = enableListening(ps, outInfo.ID); err != nil {
+			defer func() {
+				if outDevice != nil {
+					_ = outDevice.Release()
+				}
+			}()
+			outID = outInfo.ID
+			outLog = outInfo.String()
+		} else {
+			outID = ""
+			outLog = defaultDeviceName
+		}
+		if err = enableListening(ps, outID); err != nil {
 			return fmt.Errorf("failed to enable listening: %v", err)
 		}
 		fmt.Printf("Listening to %s with %s\n", in, out)
 		fmt.Printf("Input device: %s\n", inInfo)
-		fmt.Printf("Output device: %s\n", outInfo)
+		fmt.Printf("Output device: %s\n", outLog)
 	case false:
 		if err = disableListening(ps); err != nil {
 			return fmt.Errorf("failed to disable listening: %v", err)
@@ -199,13 +207,19 @@ func enableListening(ps *wca.IPropertyStore, outputID string) (err error) {
 	if err = ps.SetValue(&wca.PKEY_Listen_Setting_SavePower, &savePower); err != nil {
 		return fmt.Errorf("failed to disable listen save power: %v", err)
 	}
-	// Set the listen device.
 	if outputID != "" {
+		// Set the listen device.
 		var npv wca.PROPVARIANT
 		if npv, err = wca.NewStringPropVariant(outputID); err != nil {
 			return fmt.Errorf("failed to create listen device setting: %v", err)
 		}
 		if err = ps.SetValue(&wca.PKEY_Listen_Setting_Device, &npv); err != nil {
+			return fmt.Errorf("failed to set listen device: %v", err)
+		}
+	} else {
+		// Set the listen device to default.
+		empty := wca.NewEmptyPropVariant()
+		if err = ps.SetValue(&wca.PKEY_Listen_Setting_Device, &empty); err != nil {
 			return fmt.Errorf("failed to set listen device: %v", err)
 		}
 	}
