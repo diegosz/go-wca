@@ -14,6 +14,8 @@ The Audio Property System is a subset of the Windows Property System that provid
 
 Apparently, `IPropertyStore::SetValue` takes care of notifying to the `AudioSrv` and `IPropertyStore::Commit` is seemingly not required for events to fire.
 
+The properties could be observed in the registry `Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio` but any direct changes to the registry will not be reflected in the audio settings.
+
 ## Access Denied
 
 When running an example that needs to change a value in the `IPropertyStore`, it has open it with `STGM_READ_WRITE` storage mode flag.
