@@ -11,6 +11,9 @@ import (
 )
 
 func pvString(v int64) (s string) {
+	if v == 0 {
+		return
+	}
 	var us []uint16
 	var i uint32
 	var start = unsafe.Pointer(uintptr(v))
@@ -24,5 +27,17 @@ func pvString(v int64) (s string) {
 	}
 	s = syscall.UTF16ToString(us)
 	ole.CoTaskMemFree(uintptr(v))
+	return
+}
+
+func stringToPropVariant(s string) (v PROPVARIANT, err error) {
+	// TODO: Is this correct?
+	// Maybe we should use ole.SysAllocString instead of UTF16PtrFromString
+	v.VT = ole.VT_LPWSTR
+	ptr, err := syscall.UTF16PtrFromString(s)
+	if err != nil {
+		return v, err
+	}
+	v.Val = int64(uintptr(unsafe.Pointer(ptr)))
 	return
 }
