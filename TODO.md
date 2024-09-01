@@ -10,3 +10,7 @@
 - [ ] Complete ObserveMicrophones example
   - [ ] Change the logic for tracking changes
   - [ ] Show the current state of the devices and the actual changes
+- Check if stringToPropVariantis this correct
+    Maybe we should use ole.SysAllocString instead of UTF16PtrFromString
+    <https://github.com/go-ole/go-ole/blob/master/com.go>
+    <https://www.roblocher.com/whitepapers/oletypes.html>
