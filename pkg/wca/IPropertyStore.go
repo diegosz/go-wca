@@ -37,8 +37,8 @@ func (v *IPropertyStore) GetValue(key *PROPERTYKEY, pv *PROPVARIANT) (err error)
 	return
 }
 
-func (v *IPropertyStore) SetValue() (err error) {
-	err = psSetValue()
+func (v *IPropertyStore) SetValue(key *PROPERTYKEY, pv *PROPVARIANT) (err error) {
+	err = psSetValue(v, key, pv)
 	return
 }
 

@@ -45,8 +45,16 @@ func psGetValue(ps *IPropertyStore, key *PROPERTYKEY, pv *PROPVARIANT) (err erro
 	return
 }
 
-func psSetValue() (err error) {
-	return ole.NewError(ole.E_NOTIMPL)
+func psSetValue(ps *IPropertyStore, key *PROPERTYKEY, pv *PROPVARIANT) (err error) {
+	hr, _, _ := syscall.SyscallN(
+		ps.VTable().SetValue,
+		uintptr(unsafe.Pointer(ps)),
+		uintptr(unsafe.Pointer(key)),
+		uintptr(unsafe.Pointer(pv)))
+	if hr != 0 {
+		err = ole.NewError(hr)
+	}
+	return
 }
 
 func psCommit() (err error) {
