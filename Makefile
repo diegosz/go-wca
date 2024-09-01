@@ -19,4 +19,4 @@ $(RELEASE_DIR):
 	mkdir -p $(RELEASE_DIR)
 
 clean:
-	rm -rf $(RELEASE_DIR)
+	rm -rf $(RELEASE_DIR)/*.*
