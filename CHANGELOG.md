@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## v0.5.0
+
+- fix: set default device property with NewEmptyPropVariant
+- feat: add NewEmptyPropVariant
+- feat: add ListenMicrophone example
+- chore: fix makefile clean
+- feat: add NewStringPropVariant and NewBoolPropVariant
+- feat: implement SetValue
+- feat: add PKEY_Listen_Setting
+- tidy GUIDs
+- feat: add IPolicyConfigVista and SetDefaultDeviceByID example
+- feat: add ObserveMicrophones example WIP
+- feat: add ToggleMicrophone example
 - chore: lint
 - feat: add MuteMicrophone example
 - update go version requirements to 1.23
@@ -39,7 +52,7 @@
 - implemented other functions
 - updated README
 - implemented IAudioMeterInformation
-- fixing typo in AusioSessionState constants
+- fixing typo in AudioSessionState constants
 - Use uint64 for pointer return vars
 
 ## v0.2.0
